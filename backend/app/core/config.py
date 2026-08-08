@@ -12,6 +12,9 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
     
+    # External APIs
+    GEMINI_API_KEY: Optional[str] = None
+    
     # Database Settings
     POSTGRES_SERVER: str = "localhost"
     POSTGRES_USER: str = "postgres"
