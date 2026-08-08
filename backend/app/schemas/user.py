@@ -6,16 +6,16 @@ from datetime import datetime
 # --- Validation Schemas ---
 class UserBase(BaseModel):
     email: EmailStr
-    first_name: Optional[str] = None
-    last_name: Optional[str] = None
+    first_name: Optional[str] = Field(None, min_length=4)
+    last_name: Optional[str] = Field(None, min_length=4)
 
 class UserCreate(UserBase):
-    password: str = Field(min_length=8, description="Password must be at least 8 characters long")
+    password: str = Field(min_length=4, description="Password must be at least 4 characters long")
 
 class UserUpdate(BaseModel):
-    first_name: Optional[str] = None
-    last_name: Optional[str] = None
-    password: Optional[str] = Field(None, min_length=8)
+    first_name: Optional[str] = Field(None, min_length=4)
+    last_name: Optional[str] = Field(None, min_length=4)
+    password: Optional[str] = Field(None, min_length=4)
 
 class UserResponse(UserBase):
     id: UUID

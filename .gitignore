@@ -1,0 +1,28 @@
+# Environments
+venv/
+env/
+.venv/
+
+# Secrets & Configs
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Databases
+*.db
+*.sqlite3
+
+# Node / Frontend
+node_modules/
+dist/
+build/
+.npm/
+
+# OS Files
+.DS_Store
+Thumbs.db

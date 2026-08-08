@@ -21,7 +21,8 @@ class Settings(BaseSettings):
     
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:
-        return f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+        # Changed to SQLite for easy local testing without a Postgres server
+        return "sqlite:///./medishield.db"
 
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=True)
 
