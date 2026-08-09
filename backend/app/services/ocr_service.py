@@ -33,7 +33,7 @@ async def process_prescription(file_bytes: bytes, mime_type: str) -> OCRResult:
     try:
         # Pass the raw bytes to the new Gemini Vision API
         response = client.models.generate_content(
-            model='gemini-2.0-flash',
+            model='gemini-flash-latest',
             contents=[
                 types.Part.from_bytes(
                     data=file_bytes,
