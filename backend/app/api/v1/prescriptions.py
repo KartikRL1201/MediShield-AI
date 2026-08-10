@@ -14,8 +14,8 @@ async def upload_prescription(
     current_user: User = Depends(get_current_user)
 ):
     """
-    Prescription Upload & OCR API:
-    Accepts an image or PDF, sends it to the AI for analysis, and returns a structured JSON of all detected medications.
+    Unified Prescription Processing API:
+    Accepts an image, uses Gemini Vision solely for raw OCR text extraction, and then structures the data using our custom NLP engine.
     """
     if file.content_type not in ALLOWED_MIME_TYPES:
         raise HTTPException(
@@ -27,7 +27,7 @@ async def upload_prescription(
         # Read the file directly into memory
         file_bytes = await file.read()
         
-        # Pass to the AI engine
+        # Pass to the unified AI & NLP engine
         result = await process_prescription(file_bytes, file.content_type)
         return result
         

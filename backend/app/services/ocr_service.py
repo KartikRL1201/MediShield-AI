@@ -2,36 +2,21 @@ from google import genai
 from google.genai import types
 from app.core.config import settings
 from app.schemas.prescription import OCRResult
-import json
+from app.services.nlp_parser import parse_prescription_text
 
 async def process_prescription(file_bytes: bytes, mime_type: str) -> OCRResult:
     if not settings.GEMINI_API_KEY:
         raise ValueError("GEMINI_API_KEY is missing from environment variables.")
 
-    # Initialize the new genai client
     client = genai.Client(api_key=settings.GEMINI_API_KEY)
     
+    # 1. We strictly tell Gemini to ONLY extract text, no JSON or structuring.
     prompt = """
-    You are an expert medical AI assistant. Analyze this prescription image or document.
-    Extract every medication listed.
-    
-    Return the data strictly as a JSON object matching this schema:
-    {
-      "medicines": [
-        {
-          "name": "Medicine Name",
-          "dosage": "500mg",
-          "frequency": "Twice a day",
-          "duration": "7 days"
-        }
-      ]
-    }
-    
-    Do not include any markdown formatting, backticks, or conversational text. Return raw JSON only.
+    You are an expert OCR scanner. Analyze this image and extract all the text you see.
+    Do not format the text. Do not return JSON. Just return the raw text exactly as it appears in the image, line by line.
     """
     
     try:
-        # Pass the raw bytes to the new Gemini Vision API
         response = client.models.generate_content(
             model='gemini-flash-latest',
             contents=[
@@ -43,19 +28,13 @@ async def process_prescription(file_bytes: bytes, mime_type: str) -> OCRResult:
             ]
         )
         
-        # Parse the JSON response
-        text_response = response.text.strip()
-        if text_response.startswith('```json'):
-            text_response = text_response[7:-3].strip()
-        elif text_response.startswith('```'):
-            text_response = text_response[3:-3].strip()
-            
-        json_data = json.loads(text_response)
+        raw_ocr_text = response.text.strip()
         
-        # Map to Pydantic schema
-        return OCRResult(**json_data)
+        # 2. Pass the raw string to our non-LLM NLP parser to do the actual brain work
+        final_result = parse_prescription_text(raw_ocr_text)
+        
+        return final_result
         
     except Exception as e:
-        print(f"Error calling Gemini: {e}")
-        # In a real app, we might want to log this securely.
-        raise ValueError("Failed to extract data from the prescription. The image might be too blurry.")
+        print(f"Error calling Gemini or NLP Parser: {e}")
+        raise ValueError(f"Failed to process the prescription: {str(e)}")
