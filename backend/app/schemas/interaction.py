@@ -11,7 +11,13 @@ class InteractionDetail(BaseModel):
     reason: str
     recommendation: str
 
+class DuplicateDetail(BaseModel):
+    generic_name: str
+    brands_found: List[str]
+
 class InteractionCheckResponse(BaseModel):
     interactions: List[InteractionDetail]
+    duplicates: List[DuplicateDetail] = []
     unknown_medicines: List[str] = []
+    allergies_triggered: List[str] = []
     status: str # "Safe", "Dangerous", or "Unknown"

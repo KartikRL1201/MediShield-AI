@@ -17,7 +17,4 @@ def check_drug_interactions(
     Drug Interaction Check API:
     Accepts a list of medication names and returns all known interactions using a highly scalable combinatorial matching algorithm.
     """
-    try:
-        return check_interactions(request.medicines, db)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to check interactions: {str(e)}")
+    return check_interactions(request.medicines, db, current_user)

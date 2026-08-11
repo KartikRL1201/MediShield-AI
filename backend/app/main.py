@@ -3,7 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.api.v1.api import api_router
 from app.core.database import engine, Base
-
+import app.models.user
+import app.models.medicine
+import app.models.interaction
+import app.models.allergy
 # Create DB tables (For MVP/Development, later we will use Alembic for migrations)
 Base.metadata.create_all(bind=engine)
 

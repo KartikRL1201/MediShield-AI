@@ -1,4 +1,5 @@
 import uuid
+import app.models.allergy
 from sqlalchemy import Column, String, Boolean, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from datetime import datetime, timezone
@@ -14,3 +15,6 @@ class User(Base):
     last_name = Column(String, nullable=True)
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    
+    from sqlalchemy.orm import relationship
+    allergies = relationship("UserAllergy", back_populates="user", cascade="all, delete-orphan")
