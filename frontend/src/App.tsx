@@ -6,6 +6,7 @@ import { Register } from './features/auth/Register';
 import { ForgotPassword } from './features/auth/ForgotPassword';
 import { Profile } from './features/profile/Profile';
 import { ProtectedRoute } from './components/layout/ProtectedRoute';
+import { Dashboard } from './pages/Dashboard';
 
 const App: React.FC = () => {
   return (
@@ -20,11 +21,13 @@ const App: React.FC = () => {
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="/profile" element={<Profile />} />
-            {/* Future routes will go here: /dashboard, /medicines, etc. */}
+            <Route path="/dashboard" element={<Dashboard />} />
+            {/* Future routes will go here: /medicines, etc. */}
           </Route>
 
-          {/* Catch all redirect to login */}
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          {/* Fallback routing */}
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </Router>
     </AuthProvider>

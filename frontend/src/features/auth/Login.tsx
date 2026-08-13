@@ -14,7 +14,10 @@ export const Login: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // If user was redirected here from a protected route, go back there after login
-  const from = location.state?.from?.pathname || '/profile';
+  let from = location.state?.from?.pathname || '/dashboard';
+  if (from === '/profile') {
+    from = '/dashboard';
+  }
 
   const onSubmit = async (data: LoginData) => {
     setIsSubmitting(true);

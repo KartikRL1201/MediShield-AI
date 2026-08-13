@@ -7,6 +7,7 @@ import app.models.user
 import app.models.medicine
 import app.models.interaction
 import app.models.allergy
+import app.models.reminder
 # Create DB tables (For MVP/Development, later we will use Alembic for migrations)
 Base.metadata.create_all(bind=engine)
 
